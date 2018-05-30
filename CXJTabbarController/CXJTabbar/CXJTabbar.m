@@ -97,9 +97,14 @@ static NSInteger const plusIndex = 9999;
     //tabbarButton位置变量
     CGFloat tabbarButtonX = 0.0f;
     CGFloat tabbarButtonY = 0.0f;
-    NSInteger tabbarButtonCount = self.items.count % 2 == 0 ? self.items.count : self.items.count + 1;
-    tabbarButtonCount = tabbarButtonCount > 4 ? 4 : tabbarButtonCount;
-    CGFloat tabbarButtonW = self.bounds.size.width / (tabbarButtonCount+1);
+    NSInteger tabbarButtonCount = self.items.count;
+    CGFloat tabbarButtonW = self.bounds.size.width / tabbarButtonCount;
+    if ([self.plusBtn isKindOfClass:[UIButton class]]) {
+        tabbarButtonCount = self.items.count % 2 == 0 ? self.items.count : self.items.count + 1;
+        tabbarButtonCount = tabbarButtonCount > 4 ? 4 : tabbarButtonCount;
+        tabbarButtonW = self.bounds.size.width / (tabbarButtonCount+1);
+    }
+    
     CGFloat tabbarButtonH = self.bounds.size.height;
     //badgeLabel变量
     NSString *badgeText;
@@ -114,7 +119,11 @@ static NSInteger const plusIndex = 9999;
         if (![tabbarButton isKindOfClass:NSClassFromString(@"UITabBarButton")]) continue;
         //*********设置tabbarItem的位置
         ({
-            tabbarButtonX = idx >= (tabbarButtonCount * 0.5) ? (idx+1) * tabbarButtonW : idx * tabbarButtonW;
+            if ([self.plusBtn isKindOfClass:[UIButton class]]) {
+                tabbarButtonX = idx >= (tabbarButtonCount * 0.5) ? (idx+1) * tabbarButtonW : idx * tabbarButtonW;
+            }else{
+                tabbarButtonX = idx * tabbarButtonW;
+            }
             tabbarButton.frame = CGRectMake(tabbarButtonX, tabbarButtonY, tabbarButtonW, tabbarButtonH);
             
         });
